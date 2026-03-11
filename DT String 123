@@ -1,0 +1,164 @@
+var a = `GLENMARK PHARMA
+  *****  DISINTEGRATOR   ANALYSIS REPORT    *****
+  Version V2.20
+  Instrument Sr. No. :  DU19100816
+  Equipment Id.  No. :  EPD1002
+
+                 BASKET RACK A
+
+  PROGRAM PARAMETERS
+  Program No.        :  05
+  Sample Name        :  DISINTEGRATION TEST 
+  Apparatus Type     :  USP A
+  Mesh Size/ Bolus   :  Mesh-10
+  Media Temp         :  37.5
+  Bath Temp          :  37.5
+  Mode               :  Timer
+  Buffer Change      :  No
+  Buffer 1 Name      :  WATER
+  Time 1(hh:mm:ss)   :  00:01:00
+
+  RUN PARAMETERS
+  Run Date & Time    :  02/02/26  10:57
+  Batch No.          :  19254463   
+  Run No.            :  7
+  Bath Temp A-start  :  37.4
+  Bath Temp A-stop   :  37.5
+
+  RESULTS
+    Disint. Time     Temp
+      00:00:00      37.2 øC                     
+01    00:00:17      37.1 øC               
+
+
+  NAME:.............................
+
+  SIGN:.............................
+
+  Report Printed on 02/02/26  11:40
+
+  Analysis done on LABINDIA DT 1000+ `
+  
+  
+  var lines = a.split("\n");  
+//   console.log(lines)
+
+
+  var Finalresult = [];
+
+  for(var i = 0; i < lines.length ; i++){  
+      
+       var line = lines[i].trim();   
+       
+       if(line.includes("Program No")){    
+        var ProgramNo = line.split(":")[1].trim();
+        Finalresult.push({Programno : ProgramNo})
+    }
+    
+      if(line.includes("Sample Name")){    
+        var SampleName = line.split(":")[1].trim();
+        Finalresult.push({samplename : SampleName})
+    }
+    
+     if(line.includes("Apparatus Type")){    
+        var ApparatusType = line.split(":")[1].trim();
+        Finalresult.push({apparatusType : ApparatusType})
+    }
+    
+    if(line.includes("Mesh Size/ Bolus")){    
+        var MeshSizeBolus = line.split(":")[1].trim();
+        Finalresult.push({meshSizeBolus : MeshSizeBolus})
+    }
+    
+    if(line.includes("Media Temp")){    
+        var MediaTemp = line.split(":")[1].trim();
+         Finalresult.push({MediaTemp : MediaTemp})
+    }
+
+    
+    if(line.includes("Mode")){    
+        var Mode = line.split(":")[1].trim();
+        Finalresult.push({mode : Mode})
+    }
+    
+    if(line.includes("Buffer 1 Name")){    
+        var BufferName = line.split(":")[1].trim();
+        Finalresult.push({bufferName : BufferName})
+    }
+    
+    if(line.includes("Batch No")){    
+        var BatchNo = line.split(":")[1].trim();
+        Finalresult.push({batchNo : BatchNo})
+    }
+    
+    if(line.includes("Bath Temp A-start")){    
+        var BatchTemp = line.split(":")[1].trim();
+        Finalresult.push({batchTemp : BatchTemp})
+    }
+    
+     if(line.includes("Bath Temp A-stop")){    
+        var BatchTempStop = line.split(":")[1].trim();
+        Finalresult.push({batchTempStop : BatchTempStop})
+    }
+    
+    if(line.includes("      ")){        // jithe asa space disel tithe jayche
+        var words = line.split(" "); // line madhle sarva words vegle krto
+        for(var j = 0; j < words.length; j++){  // ata pratyek words chech krto
+            var word = words[j].trim()  // words chya makche pudche words remove krto
+            if(word.includes(":")){  // pratyek words madhe : ahe ka check krto
+                var time = word.split(":");  // time la hh mm ss madhe split krel mahnje array madhe "00" "00" "00" asa jail
+                if(time.length === 3){  // time ha 3 parts madhe pahije hh mm ss jar asel t valid
+                    var hour = Number(time[0]); // time la number madhe convert krel jas ki "17" la 17
+                    var minutes = Number(time[1]);
+                    var second = Number(time[2]);
+                    
+                    if(!isNaN(hour) && !isNaN(minutes) && !isNaN(second) && //check krto ki value number ahe jar number asel t true nahit false
+                    hour >= 0 && hour <=23 &&     // range
+                    minutes >= 0 && minutes <=59 &&
+                    second >=0 && second <=59){    
+                        Finalresult.push({time: word, valid: true})        
+                    }else{
+                        Finalresult.push({time:word, valid: false})
+                       }
+                    }
+               }
+            }
+        }
+    }
+    console.log(Finalresult)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //  if(line.includes("00:00:00")){    
+    //     var Ditime = line.split("      ")[1].trim();
+    //     Finalresult.push({"00:00:00" : Ditime})
+    // }
+    
+    // if(line.includes("00:00:17")){    
+    //     var Ditime1 = line.split("      ")[1].trim();
+    //     Finalresult.push({"00:00:17" : Ditime1})
+    // }
+  
+  
+  
