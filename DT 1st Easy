@@ -1,0 +1,214 @@
+var a = `                             ELECTROLAB DISINTEGRATION TESTER                   
+                                        TEST REPORT                             
+
+     Company Name : CIPLA               
+
+     Model No : ED2-SAPOx                          Version : 1.2.F            
+
+     Sr. No.  : 1501005                        Start Date: 23/05/2022      
+
+     USER NAME     : RPG                       Instrument ID: ED2-SAPOx 
+
+     SET PARAMETERS:-
+
+     MODE          :   Registration            SET BATH TEMP. :  44.5
+
+                    |            ARM A           |              ARM B         |
+                    |                            |                            |
+     DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
+                    |                            |                            |
+     MEDIA NAME     |  WATER                     |  NA                        |
+                    |                            |                            |
+     BATCH No.      |  KA21587                   |  NA                        |
+                    |                            |                            |
+     LOT No.        |  NA                        |  NA                        |
+                    |                            |                            |
+     PROTOCOL       |  01                        |  10                        |
+                    |                            |                            |
+     BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
+     _______________|____________________________|____________________________|
+     TEST SUMMARY:-
+                    |            ARM A           |              ARM B         |
+     START TIME     |         09:42:37           |           N.A              |
+                    |                            |                            |
+     END TIME       |         09:44:20           |           N.A              |
+                    |                            |                            |
+     TEST STATUS    |       Test Completed       |           N.A              |
+                    |                            |                            |
+     TEST ON DUR.   |                            |                            |
+           1.       |         00:00:33           |           N.A.             |
+                    |                            |                            |
+           2.      a |         00:01:34           |           N.A.             |
+                    |                            |                            |
+           3.       |         00:01:45           |           N.A.             |
+                    |                            |                            |
+           4.       |         00:01:39           |           N.A.             |
+                    |                            |                            |
+           5.       |         00:01:38           |           N.A.             |
+                    |                            |                            |
+           6.       |         00:01:37           |           N.A.             |
+                    |                            |                            |
+        HALT DUR.   |         00:00:00           |           N.A.             |
+     _______________|____________________________|____________________________|
+
+                         BATH              JAR A             JAR B           
+     TEMP. MIN.     :    47.3              39.5              --                 
+     TEMP. MAX.     :    53.8              41.9              --                 
+
+     COMMENT    :                      
+
+     SIGNATURE  :  __________________________________________________
+`
+
+
+var lines = a.split("\n"); 
+// console.log(lines)
+
+var Finalresult = [];
+
+for(var i = 0; i < lines.length ; i++){
+    
+    var line = lines[i].trim();
+    console.log(line)
+    
+     if(line.includes("USER NAME")){
+         var Instrument = line.split(":")[2].trim()
+         Finalresult.push({InstrumentID : Instrument})
+         
+     }
+     
+     if(line.includes("MODE")){
+         var mode = line.split("          :   ")[0].trim()
+         Finalresult.push({Mode : mode})
+         
+     }
+     
+     if(line.includes("SET BATH TEMP")){
+         var Setmode = line.split(". :  ")[1].trim()
+         Finalresult.push({SETBATHTEMP : Setmode})
+         
+     }
+     
+      if(line.includes("START TIME")){
+         var StartTim = line.split("     |         ")[1].trim()
+         Finalresult.push({StartTime : StartTim})
+         
+     }
+     
+     if(line.includes("END TIME")){
+         var EndTim = line.split("       |         ")[1].trim()
+         Finalresult.push({EndTime : EndTim})
+         
+     }
+     
+     if(line.includes("N.A.")){
+         var Test = line.split("         ")
+         var words = line.split(" "); 
+       
+        for(var j = 0; j < words.length; j++){  
+            var word = words[j].trim()  
+            if(word.includes(":")){  
+                var time = word.split(":");  
+                if(time.length === 3){  
+                    var hour = Number(time[0]); 
+                    var minutes = Number(time[1]);
+                    var second = Number(time[2]);
+                    
+                    if(!isNaN(hour) && !isNaN(minutes) && !isNaN(second) && 
+                    hour >= 0 && hour <=23 &&     
+                    minutes >= 0 && minutes <=59 &&
+                    second >=0 && second <=59){    
+                         Finalresult.push({TESTSUMMARY:word, valid: true})        
+                    }else{
+                        Finalresult.push({TESTSUMMARY:word, valid: false})
+                      }
+                    }
+              }
+            }
+            
+     }
+     
+     
+      if(line.includes("TEMP. MIN.")){
+         var TempMin = line.split("    ")[2].trim()
+         Finalresult.push({tempMin : TempMin})
+     }
+     
+      if(line.includes("TEMP. MAX.")){
+         var TempMax = line.split("    ")[2].trim()
+         Finalresult.push({tempMax : TempMax})
+     }
+}
+console.log(Finalresult)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  if(line.includes("2.      a |")){
+    //      var Test = line.split("         ")[1].trim()
+    //      Finalresult.push({2 : Test})
+         
+         
+    //  }
+     
+    //   if(line.includes("3.       |")){
+    //      var Test = line.split("         ")[1].trim()
+    //      Finalresult.push({3 : Test})
+         
+    //  }
+     
+    //  if(line.includes("4.       |")){
+    //      var Test = line.split("         ")[1].trim()
+    //      Finalresult.push({4 : Test})
+         
+    //  }
+     
+    //  if(line.includes("5.       |")){
+    //      var Test = line.split("         ")[1].trim()
+    //      Finalresult.push({5 : Test})
+         
+    //  }
+     
+    //  if(line.includes("6.       |")){
+    //      var Test = line.split("         ")[1].trim()
+    //      Finalresult.push({6 : Test})
+    //  }
+     
+    //  if(line.includes("HALT DUR.   |")){
+    //      var Test = line.split("         ")[1].trim()
+    //      Finalresult.push({HALTDUR : Test})
+    //  }
