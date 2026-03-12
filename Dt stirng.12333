@@ -91,10 +91,12 @@ for(var i = 0; i < lines.length ; i++){
 
                 var obj = {}
 
-                if(!isNaN(hour) && !isNaN(minutes) && !isNaN(second)
+                if(!isNaN(hour) && !isNaN(minutes) && !isNaN(second) &&
+                
                     hour >= 0 && hour <=23 &&     
                     minutes >= 0 && minutes <=59 &&
-                    second >=0 && second <=59)){    
+                    second >=0 && second <=59)
+                    {    
 
                     obj[number] = time
                     obj.valid = true
