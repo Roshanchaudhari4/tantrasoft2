@@ -1,0 +1,149 @@
+var a = ` ELECTROLAB DISINTEGRATION TESTER                   
+                                        TEST REPORT                             
+
+     Company Name : CIPLA               
+
+     Model No : ED2-SAPOx Version : 1.2.F            
+
+     Sr. No. : 1501005 Start Date: 23/05/2022      
+
+     USER NAME : RPG Instrument ID: ED2-SAPOx 
+
+     SET PARAMETERS:-
+
+     MODE : Registration SET BATH TEMP. : 44.5
+
+                    | ARM A | ARM B |
+     TEST SUMMARY:-
+                    | ARM A | ARM B |
+     START TIME | 09:42:37 | N.A |
+     END TIME | 09:44:20 | N.A |
+
+     TEST ON DUR. |
+           1. | 00:00:33 | N.A. |
+           2. | 00:01:34 | N.A. |
+           3. | 00:01:45 | N.A. |
+           4. | 00:01:39 | N.A. |
+           5. | 00:01:38 | N.A. |
+           6. | 00:01:37 | N.A. |
+
+     TEMP. MIN. : 47.3 39.5 --                 
+     TEMP. MAX. : 53.8 41.9 --                 
+`;
+
+var lines = a.split("\n");  // next line la jaun next line read krel
+
+var Finalresult = [];
+var maxSeconds = 0;  // store max seconds ata aapan max hi zero set keliy
+var maxTime = "";  // ye variable max time string format madhe store hoil jas ki "00:00:33"
+
+for(var i = 0; i < lines.length ; i++){
+
+    var line = lines[i].trim();
+    console.log(line)
+    
+
+    if(line.includes("USER NAME")){
+         var Instrument = line.split(":")[2].trim()
+         Finalresult.push({InstrumentID : Instrument})
+         
+     }
+
+    if(line.includes("MODE")){
+        var mode = line.split(" : ")[1].split("SET")[0].trim()
+        Finalresult.push({Mode : mode})  // ye string la colon ne divide krel mahnje colon nantar cha hissa mang set ne split krel mang aaplyakade Registration  BATH TEMP mang ya madhun aaplyla 0 th index var ky ahe te bagaychay mang te kadle
+    }
+    
+    
+
+    if(line.includes("SET BATH TEMP")){
+        var Setmode = line.split(":")[2].trim()
+        Finalresult.push({SETBATHTEMP : Setmode})
+    }
+
+    if(line.includes("START TIME")){
+        var StartTim = line.split("|")[1].trim()
+        Finalresult.push({StartTime : StartTim})
+    }
+
+    if(line.includes("END TIME")){
+        var EndTim = line.split("|")[1].trim()
+        Finalresult.push({EndTime : EndTim})
+    }
+
+    if(line.includes("|") && line.includes("N.A.")){  // jithe he | asel ani jithe N.A asel tech geyche
+
+        var parts = line.split("|")   // | ne split kel 
+
+        var number = parts[0].replace(".","").trim()  // 1. madhe jo . hota to remove kela
+
+        var time = parts[1].trim()   // part 1 mahnje 00:00:33 yala trim kela mahnje whitespace remove kela
+
+        if(number !== ""){   // number variable madhe empty string nako number ch pahije
+
+            var time1 = time.split(":") // time ha array madhe split hoil "00", "00", "33"
+
+            if(time1.length === 3){   // jar time madhe 3 field ahe jas ki hh mm ss tar pudhe jail
+
+                var hour = Number(time1[0])    //hh
+                var minutes = Number(time1[1])   //mm
+                var second = Number(time1[2])   //ss
+
+                var obj = {}
+
+                if(!isNaN(hour) && !isNaN(minutes) && !isNaN(second)
+                    hour >= 0 && hour <=23 &&     
+                    minutes >= 0 && minutes <=59 &&
+                    second >=0 && second <=59)){    
+
+                    obj[number] = time
+                    obj.valid = true
+
+                    var totalSeconds = hour*3600 + minutes*60 + second    // 1 hour 60 seconds = 3600
+                                  // 60 minutes
+                                  // 60 seconds
+
+                    if(totalSeconds > maxSeconds){   
+                        maxSeconds = totalSeconds
+                        maxTime = time
+                    }
+                    
+                    // 33 > 0 -true
+                    // 34 > 33 - true
+                    // 45 > 34 - true
+                    // 39 > 45 - false
+                    // 38 > 45 - false
+                    // 37 > 45 - false
+                    // so max time will be 45
+                    
+                    // jar code madhe 00:01:33  and 00:02:33  ho to 0 * 3600 + 1 * 60 + 33 = 93 
+                    // 0 * 3600 + 2 * 60 + 34 = 154 
+                    // so 00:02:33 ha motha he 
+
+                }else{
+
+                    obj[number] = time    // object ahe tya madhe to time store hoil jar format hh mm ss asel tar jar 00:01:10 asel t true jar 00:aa:33 asel t false
+                    obj.valid = false
+                }
+
+                Finalresult.push(obj) // jo final result yeil to array madhe push hoil
+
+            }
+        }
+    }
+
+    if(line.includes("TEMP. MIN.")){
+        var TempMin = line.split(":")[1].trim().split(" ")[0]
+        Finalresult.push({tempMin : TempMin})
+    } // string la split krel : madhe mang aaplya : pudhe yenare pahjije mang aapan space ne trim krel man index 0 la 47.3 yeil te print karayche
+    
+
+    if(line.includes("TEMP. MAX.")){
+        var TempMax = line.split(":")[1].trim().split(" ")[0]
+        Finalresult.push({tempMax : TempMax})
+    }
+}
+
+Finalresult.push({MaxTime : maxTime})
+
+console.log(Finalresult)

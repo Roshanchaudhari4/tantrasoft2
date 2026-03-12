@@ -1,0 +1,126 @@
+var a = ` ELECTROLAB DISINTEGRATION TESTER                   
+                                        TEST REPORT                             
+
+     Company Name : CIPLA               
+
+     Model No : ED2-SAPOx Version : 1.2.F            
+
+     Sr. No. : 1501005 Start Date: 23/05/2022      
+
+     USER NAME : RPG Instrument ID: ED2-SAPOx 
+
+     SET PARAMETERS:-
+
+     MODE : Registration SET BATH TEMP. : 44.5
+
+                    | ARM A | ARM B |
+     TEST SUMMARY:-
+                    | ARM A | ARM B |
+     START TIME | 09:42:37 | N.A |
+     END TIME | 09:44:20 | N.A |
+
+     TEST ON DUR. |
+           1. | 00:00:33 | N.A. |
+           2. | 00:01:34 | N.A. |
+           3. | 00:01:45 | N.A. |
+           4. | 00:01:39 | N.A. |
+           5. | 00:01:38 | N.A. |
+           6. | 00:01:37 | N.A. |
+
+     TEMP. MIN. : 47.3 39.5 --                 
+     TEMP. MAX. : 53.8 41.9 --                 
+`;
+
+var lines = a.split("\n");
+
+var Finalresult = [];
+var maxSeconds = 0;
+var maxTime = "";
+
+for(var i = 0; i < lines.length ; i++){
+
+    var line = lines[i].trim();
+
+    if(line.includes("USER NAME")){
+        var Instrument = line.split(":")[2].trim()
+        Finalresult.push({InstrumentID : Instrument})
+    }
+
+    if(line.includes("MODE")){
+        var mode = line.split(":")[1].split("SET")[0].trim()
+        Finalresult.push({Mode : mode})
+    }
+
+    if(line.includes("SET BATH TEMP")){
+        var Setmode = line.split(":")[2].trim()
+        Finalresult.push({SETBATHTEMP : Setmode})
+    }
+
+    if(line.includes("START TIME")){
+        var StartTim = line.split("|")[1].trim()
+        Finalresult.push({StartTime : StartTim})
+    }
+
+    if(line.includes("END TIME")){
+        var EndTim = line.split("|")[1].trim()
+        Finalresult.push({EndTime : EndTim})
+    }
+
+    if(line.includes("|") && line.includes("N.A.")){
+
+        var parts = line.split("|")
+
+        var number = parts[0].replace(".","").trim()
+
+        var time = parts[1].trim()
+
+        if(number !== ""){
+
+            var t = time.split(":")
+
+            if(t.length === 3){
+
+                var hour = Number(t[0])
+                var minutes = Number(t[1])
+                var second = Number(t[2])
+
+                var obj = {}
+
+                if(!isNaN(hour) && !isNaN(minutes) && !isNaN(second)){
+
+                    obj[number] = time
+                    obj.valid = true
+
+                    var totalSeconds = hour*3600 + minutes*60 + second
+
+                    if(totalSeconds > maxSeconds){
+                        maxSeconds = totalSeconds
+                        maxTime = time
+                    }
+
+                }else{
+
+                    obj[number] = time
+                    obj.valid = false
+                }
+
+                Finalresult.push(obj)
+
+            }
+        }
+    }
+
+    if(line.includes("TEMP. MIN.")){
+        var TempMin = line.split(":")[1].trim().split(" ")[0]
+        Finalresult.push({tempMin : TempMin})
+    }
+
+    if(line.includes("TEMP. MAX.")){
+        var TempMax = line.split(":")[1].trim().split(" ")[0]
+        Finalresult.push({tempMax : TempMax})
+    }
+}
+
+Finalresult.push({MaxTime : maxTime})
+
+console.log(Finalresult)
