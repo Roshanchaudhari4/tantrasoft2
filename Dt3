@@ -1,0 +1,472 @@
+var a = `                             ELECTROLAB DISINTEGRATION TESTER                   
+                                        TEST REPORT                             
+
+     Company Name : CIPLA               
+
+     Model No : ED2-SAPOx                          Version : 1.2.F            
+
+     Sr. No.  : 1501005                        Start Date: 23/05/2022      
+
+     USER NAME     : RPG                       Instrument ID: ED2-SAPOx 
+
+     SET PARAMETERS:-
+
+     MODE          :   Registration            SET BATH TEMP. :  24.5
+
+                    |            ARM A           |              ARM B         |
+                    |                            |                            |
+     DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
+                    |                            |                            |
+     MEDIA NAME     |  WATER                     |  NA                        |
+                    |                            |                            |
+     BATCH No.      |  KA21587                   |  NA                        |
+                    |                            |                            |
+     LOT No.        |  NA                        |  NA                        |
+                    |                            |                            |
+     PROTOCOL       |  01                        |  10                        |
+                    |                            |                            |
+     BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
+     _______________|____________________________|____________________________|
+     TEST SUMMARY:-
+                    |            ARM A           |              ARM B         |
+     START TIME     |         09:42:37           |           N.A              |
+                    |                            |                            |
+     END TIME       |         09:44:20           |           N.A              |
+                    |                            |                            |
+     TEST STATUS    |       Test Completed       |           N.A              |
+                    |                            |                            |
+     TEST ON DUR.   |                            |                            |
+           1.       |         00:01:33           |           N.A.             |
+                    |                            |                            |
+           2.       |         00:01:34           |           N.A.             |
+                    |                            |                            |
+           3.       |         00:01:43           |           N.A.             |
+                    |                            |                            |
+           4.       |         00:01:39           |           N.A.             |
+                    |                            |                            |
+           5.       |         00:01:38           |           N.A.             |
+                    |                            |                            |
+           6.       |         00:01:37           |           N.A.             |
+                    |                            |                            |
+        HALT DUR.   |         00:00:00           |           N.A.             |
+     _______________|____________________________|____________________________|
+
+                         BATH              JAR A             JAR B           
+     TEMP. MIN.     :    45.2              34.5              --                 
+     TEMP. MAX.     :    50.8              40.1             --                 
+
+     COMMENT    :                      
+
+     SIGNATURE  :  __________________________________________________
+
+                             ELECTROLAB DISINTEGRATION TESTER                   
+                                        TEST REPORT                             
+
+     Company Name : CIPLA               
+
+     Model No : ED2-SAPOx                          Version : 1.2.F            
+
+     Sr. No.  : 1501005                        Start Date: 23/05/2022      
+
+     USER NAME     : RPG                       Instrument ID: ED2-SAPOx 
+
+     SET PARAMETERS:-
+
+     MODE          :   Registration            SET BATH TEMP. :  44.5
+
+                    |            ARM A           |              ARM B         |
+                    |                            |                            |
+     DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
+                    |                            |                            |
+     MEDIA NAME     |  WATER                     |  NA                        |
+                    |                            |                            |
+     BATCH No.      |  KA21587                   |  NA                        |
+                    |                            |                            |
+     LOT No.        |  NA                        |  NA                        |
+                    |                            |                            |
+     PROTOCOL       |  01                        |  10                        |
+                    |                            |                            |
+     BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
+     _______________|____________________________|____________________________|
+     TEST SUMMARY:-
+                    |            ARM A           |              ARM B         |
+     START TIME     |           N.A              |           09:47:02         |
+                    |                            |                            |
+     END TIME       |           N.A              |           09:47:28         |
+                    |                            |                            |
+     TEST STATUS    |           N.A              |       Test Completed       |
+                    |                            |                            |
+     TEST ON DUR.   |                            |                            |
+           1.       |         N.A.               |           00:00:19         |
+                    |                            |                            |
+           2.       |         N.A.               |           00:00:20         |
+                    |                            |                            |
+           3.       |         N.A.               |           00:00:30         |
+                    |                            |                            |
+           4.       |         N.A.               |           00:00:21         |
+                    |                            |                            |
+           5.       |         N.A.               |           00:00:22         |
+                    |                            |                            |
+           6.       |         N.A.               |           00:00:24         |
+                    |                            |                            |
+        HALT DUR.   |         N.A.               |           00:00:00         |
+     _______________|____________________________|____________________________|
+
+                         BATH              JAR A             JAR B           
+     TEMP. MIN.     :    57.6                   --            22.3              
+     TEMP. MAX.     :    53.1                   --            40.7              
+
+     COMMENT    :                      
+
+     SIGNATURE  :  __________________________________________________
+`
+
+
+var lines = a.split("\n");
+
+var Finalresult = [];
+var maxSecondsA = 0; 
+var maxSecondsB = 0;
+var maxTimeA = "";
+var maxTimeB = "";
+var FinalMaxTime = "";
+
+
+ 
+
+
+for(var i = 0; i < lines.length ; i++){
+
+    var line = lines[i].trim();
+    console.log(line)
+    
+    if(line.includes("START TIME")){
+    var parts = line.split("|")
+    var StartTime = parts[1].trim()
+
+    if(parts[1].trim() !== "N.A"){
+        Finalresult.push({startTimeA : StartTime})
+    }
+}
+
+   if(line.includes("END TIME")){
+    var parts = line.split("|")
+    var EndTime = parts[1].trim()
+
+    if(parts[1].trim() !== "N.A"){
+        Finalresult.push({EndTime : EndTime})
+    }
+}
+     
+    
+    if(line.includes("START TIME     |           ")){
+         var StartTime1 = line.split("|")[2].trim()
+         Finalresult.push({startTimeB : StartTime1})
+     }
+     
+     if(line.includes("END TIME       |           ") ){
+         var ENDTime1 = line.split("|")[2].trim()
+         Finalresult.push({EndTime : ENDTime1})
+     }
+     
+      
+    
+     
+    if(line.includes(".       |") && line.includes("|") && line.includes(":") ){  
+     
+        var parts = line.split("|") 
+        
+        if(parts.length >= 3){  
+            
+            var number = parts[0].replace(".","").trim()   
+                
+            var timeA = parts[1].trim() 
+                    
+            var timeB = parts[2].trim() 
+}
+
+        function getresult(time){   
+            var result = time.split(":") 
+            return Number(result[0])*3600 + Number(result[1])*60 + Number(result[2])  
+        }    
+
+        var obj = {}   
+        
+        var tiA = timeA.split(":")   
+        
+        if(tiA.length === 3){ 
+
+            var hourA = Number(tiA[0])   
+            var minA = Number(tiA[1])   
+            var secA = Number(tiA[2])    
+            
+            
+            if(!isNaN(hourA) && !isNaN(minA) && !isNaN(secA)
+             &&
+                
+                    hourA >= 0 && hourA <=23 &&     
+                    minA >= 0 && minA <=59 &&
+                    secA >=0 && secA <=59){
+        
+                obj[number + "A"] = timeA  
+                obj.validA = true   
+
+                var totalA = getresult(timeA)  
+
+                if(totalA > maxSecondsA){  
+                    maxSecondsA = totalA 
+                    maxTimeA = timeA 
+                }
+                
+
+            }else{ 
+                obj[number + "A"] = timeA    
+                obj.validA = false 
+            }
+            
+        }
+        
+        
+    
+        var tiB = timeB.split(":")
+        
+        if(tiB.length === 3){
+
+            var hourB = Number(tiB[0])   
+            var minB = Number(tiB[1]) 
+            var secB = Number(tiB[2]) 
+            
+            if(!isNaN(hourB) && !isNaN(minB) && !isNaN(secB)
+            &&
+                
+                    hourB >= 0 && hourB <=23 &&     
+                    minB >= 0 && minB<=59 &&
+                    secB >=0 && secB <=59){
+        
+                obj[number + "B"] = timeB
+                obj.validB = true  
+
+                var totalB = getresult(timeB)
+
+                if(totalB > maxSecondsB){
+                    maxSecondsB = totalB 
+                    maxTimeB = timeB 
+                }
+
+            }else{ 
+                obj[number + "B"] = timeB   
+                obj.validB = false 
+            }
+
+        }
+
+        Finalresult.push(obj)
+        
+        
+
+      }
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+     if(line.includes("TEMP. MIN.")){
+         var Tempmin1 = line.split(":")[1].trim().split("                   --            ")[0]
+         Finalresult.push({TempMinBath : Tempmin1})
+     }
+     
+     if(line.includes("TEMP. MIN.")){
+         var Tempmin1 = line.split(":")[1].trim().split("                   --            ")[1]
+         Finalresult.push({TempmaxJarA : Tempmin1})
+     }
+     
+     if(line.includes("TEMP. MAX.")){
+         var Tempmax1 = line.split(":")[1].trim().split("                   --            ")[0]
+         Finalresult.push({TempMaxBath : Tempmax1})
+     }
+     
+     
+     if(line.includes("TEMP. MAX.")){
+         var Tempmax3 = line.split(":")[1].trim().split("                   --            ")[1]
+         Finalresult.push({TempMaxJarB : Tempmax3})
+     }
+    }
+    
+    
+    
+    
+
+              if(maxSecondsA > maxSecondsB){
+                  FinalMaxTime = maxTimeA
+              }else{
+                  FinalMaxTime = maxTimeB
+                   }
+
+
+
+Finalresult.push({maxtimeA: maxTimeA})
+Finalresult.push({maxtimeB: maxTimeB})
+Finalresult.push({Finalmax: FinalMaxTime})
+
+
+console.log(Finalresult)
+
+ELECTROLAB DISINTEGRATION TESTER
+TEST REPORT
+
+Company Name : CIPLA
+
+Model No : ED2-SAPOx                          Version : 1.2.F
+
+Sr. No.  : 1501005                        Start Date: 23/05/2022
+
+USER NAME     : RPG                       Instrument ID: ED2-SAPOx
+
+SET PARAMETERS:-
+
+MODE          :   Registration            SET BATH TEMP. :  24.5
+
+|            ARM A           |              ARM B         |
+|                            |                            |
+DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
+|                            |                            |
+MEDIA NAME     |  WATER                     |  NA                        |
+|                            |                            |
+BATCH No.      |  KA21587                   |  NA                        |
+|                            |                            |
+LOT No.        |  NA                        |  NA                        |
+|                            |                            |
+PROTOCOL       |  01                        |  10                        |
+|                            |                            |
+BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
+_______________|____________________________|____________________________|
+TEST SUMMARY:-
+|            ARM A           |              ARM B         |
+START TIME     |         09:42:37           |           N.A              |
+|                            |                            |
+END TIME       |         09:44:20           |           N.A              |
+|                            |                            |
+TEST STATUS    |       Test Completed       |           N.A              |
+|                            |                            |
+TEST ON DUR.   |                            |                            |
+1.       |         00:01:33           |           N.A.             |
+|                            |                            |
+2.       |         00:01:34           |           N.A.             |
+|                            |                            |
+3.       |         00:01:43           |           N.A.             |
+|                            |                            |
+4.       |         00:01:39           |           N.A.             |
+|                            |                            |
+5.       |         00:01:38           |           N.A.             |
+|                            |                            |
+6.       |         00:01:37           |           N.A.             |
+|                            |                            |
+HALT DUR.   |         00:00:00           |           N.A.             |
+_______________|____________________________|____________________________|
+
+BATH              JAR A             JAR B
+TEMP. MIN.     :    45.2              34.5              --
+TEMP. MAX.     :    50.8              40.1             --
+
+COMMENT    :
+
+SIGNATURE  :  __________________________________________________
+
+ELECTROLAB DISINTEGRATION TESTER
+TEST REPORT
+
+Company Name : CIPLA
+
+Model No : ED2-SAPOx                          Version : 1.2.F
+
+Sr. No.  : 1501005                        Start Date: 23/05/2022
+
+USER NAME     : RPG                       Instrument ID: ED2-SAPOx
+
+SET PARAMETERS:-
+
+MODE          :   Registration            SET BATH TEMP. :  44.5
+
+|            ARM A           |              ARM B         |
+|                            |                            |
+DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
+|                            |                            |
+MEDIA NAME     |  WATER                     |  NA                        |
+|                            |                            |
+BATCH No.      |  KA21587                   |  NA                        |
+|                            |                            |
+LOT No.        |  NA                        |  NA                        |
+|                            |                            |
+PROTOCOL       |  01                        |  10                        |
+|                            |                            |
+BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
+_______________|____________________________|____________________________|
+TEST SUMMARY:-
+|            ARM A           |              ARM B         |
+START TIME     |           N.A              |           09:47:02         |
+|                            |                            |
+END TIME       |           N.A              |           09:47:28         |
+|                            |                            |
+TEST STATUS    |           N.A              |       Test Completed       |
+|                            |                            |
+TEST ON DUR.   |                            |                            |
+1.       |         N.A.               |           00:00:19         |
+|                            |                            |
+2.       |         N.A.               |           00:00:20         |
+|                            |                            |
+3.       |         N.A.               |           00:00:30         |
+|                            |                            |
+4.       |         N.A.               |           00:00:21         |
+|                            |                            |
+5.       |         N.A.               |           00:00:22         |
+|                            |                            |
+6.       |         N.A.               |           00:00:24         |
+|                            |                            |
+HALT DUR.   |         N.A.               |           00:00:00         |
+_______________|____________________________|____________________________|
+
+BATH              JAR A             JAR B
+TEMP. MIN.     :    57.6                   --            22.3
+TEMP. MAX.     :    53.1                   --            40.7
+
+COMMENT    :
+
+SIGNATURE  :  __________________________________________________
+
+// [
+//   { startTimeA: '09:42:37' },
+//   { EndTime: '09:44:20' },
+//   { '1A': '00:01:33', validA: true },
+//   { '2A': '00:01:34', validA: true },
+//   { '3A': '00:01:43', validA: true },
+//   { '4A': '00:01:39', validA: true },
+//   { '5A': '00:01:38', validA: true },
+//   { '6A': '00:01:37', validA: true },
+//   { TempMinBath: '45.2              34.5              --' },
+//   { TempmaxJarA: undefined },
+//   { TempMaxBath: '50.8              40.1             --' },
+//   { TempMaxJarB: undefined },
+//   { startTimeB: '09:47:02' },
+//   { EndTime: '09:47:28' },
+//   { '1B': '00:00:19', validB: true },
+//   { '2B': '00:00:20', validB: true },
+//   { '3B': '00:00:30', validB: true },
+//   { '4B': '00:00:21', validB: true },
+//   { '5B': '00:00:22', validB: true },
+//   { '6B': '00:00:24', validB: true },
+//   { TempMinBath: '57.6' },
+//   { TempmaxJarA: '22.3' },
+//   { TempMaxBath: '53.1' },
+//   { TempMaxJarB: '40.7' },
+//   { maxtimeA: '00:01:43' },
+//   { maxtimeB: '00:00:30' },
+//   { Finalmax: '00:01:43' }
+// ]
+
+// === Code Execution Successful ===
