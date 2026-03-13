@@ -73,7 +73,6 @@ var FinalMaxTime = "";
 
 
 
-
 for(var i = 0; i < lines.length ; i++){
 
     var line = lines[i].trim();
@@ -112,7 +111,10 @@ for(var i = 0; i < lines.length ; i++){
             var timeA = parts[1].trim() // part 1 mahnje  00:00:55 he line ya line cha makcha pudcha space remove krel mahnje trim krel
                     
             var timeB = parts[2].trim() // part 2 mahnje  00:00:56 he line ya line cha makcha pudcha space remove krel mahnje trim krel
-
+            
+            
+          
+}
 
         function getresult(time){   // ek function create kela 
             var result = time.split(":") // HH:MM:SS la : yane split krel mahnje ata to array madhe convert hoil ex ['00','00', '55']
@@ -170,20 +172,7 @@ for(var i = 0; i < lines.length ; i++){
 
         }
          
-  // for maximum ta ite max asel 00:00:55 mang timeA cha max ha ahe aapan ekach maxsecond function banvlay so ata hi same value check krel timeB la 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
+ 
         var tiB = timeB.split(":")
         
         if(tiB.length === 3){
@@ -215,130 +204,59 @@ for(var i = 0; i < lines.length ; i++){
             }
 
         }
-        
-        
-        
 
         Finalresult.push(obj)
 
       }
+    
       
-      
-    }
-      
+     if(line.includes("TEMP. MIN.")){
+         var Tempmin1 = line.split(":")[1].trim().split("              ")[0]
+         Finalresult.push({TempMinBath : Tempmin1})
+     }
      
      if(line.includes("TEMP. MIN.")){
-        var TempMin = line.split(":")[1].trim().split(" ")[0]
-        Finalresult.push({tempMin : TempMin})
-    } 
-    
-    if(line.includes("TEMP. MAX.")){
-        var TempMax = line.split(":")[1].trim().split(" ")[0]
-        Finalresult.push({tempMax : TempMax})
+         var Tempmin2 = line.split(":")[1].trim().split("              ")[1]
+         Finalresult.push({TempMinJarA : Tempmin2})
+     }
+     
+      if(line.includes("TEMP. MIN.")){
+         var Tempmin3 = line.split(":")[1].trim().split("              ")[2]
+         Finalresult.push({TempMinJarB : Tempmin3})
+     }
+     
+     
+     
+     
+     
+     
+     if(line.includes("TEMP. MAX.")){
+         var Tempmax1 = line.split(":")[1].trim().split("              ")[0]
+         Finalresult.push({TempMaxBath : Tempmax1})
+     }
+     
+     if(line.includes("TEMP. MAX.")){
+         var Tempmax2 = line.split(":")[1].trim().split("              ")[1]
+         Finalresult.push({TempMaxJarA : Tempmax2})
+     }
+     
+     if(line.includes("TEMP. MAX.")){
+         var Tempmax3 = line.split(":")[1].trim().split("              ")[2]
+         Finalresult.push({TempMaxJarB : Tempmax3})
+     }
     }
-}
 
-// Finalresult.push({FinalTime:maxSeconds})
-
-if(maxSecondsA > maxSecondsB){
-    FinalMaxTime = maxTimeA
-}else{
-    FinalMaxTime = maxTimeB
-}
+              if(maxSecondsA > maxSecondsB){
+                  FinalMaxTime = maxTimeA
+              }else{
+                  FinalMaxTime = maxTimeB
+                   }
 
 
 
-Finalresult.push({maxtimeA: maxSecondsA})
-Finalresult.push({maxtimeB: maxSecondsB})
+Finalresult.push({maxtimeA: maxTimeA})
+Finalresult.push({maxtimeB: maxTimeB})
 Finalresult.push({Finalmax: FinalMaxTime})
 
+
 console.log(Finalresult)
-
-
-// ELECTROLAB DISINTEGRATION TESTER
-// TEST REPORT
-
-// Company Name : CIPLA
-
-// Model No : ED2-SAPOx                          Version : 1.2.F
-
-// Sr. No.  : 1501005                        Start Date: 23/05/2022
-
-// USER NAME     : RPG                       Instrument ID: ED2-SAPOx
-
-// SET PARAMETERS:-
-
-// MODE          :   Registration            SET BATH TEMP. :  44.5
-
-// |            ARM A           |              ARM B         |
-// |                            |                            |
-// DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
-// |                            |                            |
-// MEDIA NAME     |  WATER                     |  NA                        |
-// |                            |                            |
-// BATCH No.      |  KA21587                   |  NA                        |
-// |                            |                            |
-// LOT No.        |  NA                        |  NA                        |
-// |                            |                            |
-// PROTOCOL       |  01                        |  10                        |
-// |                            |                            |
-// BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
-// _______________|____________________________|____________________________|
-// TEST SUMMARY:-
-// |            ARM A           |              ARM B         |
-// START TIME     |         10:04:54           |           10:04:59         |
-// |                            |                            |
-// END TIME       |         10:05:46           |           10:05:50         |
-// |                            |                            |
-// TEST STATUS    |       Test Completed       |       Test Completed       |
-// |                            |                            |
-// TEST ON DUR.   |                            |                            |
-// 1.       |         00:00:55           |           00:00:56         |
-// |                            |                            |
-// 2.       |         00:00:50           |           00:00:51         |
-// |                            |                            |
-// 3.       |         00:00:50           |           00:00:59         |
-// |                            |                            |
-// 4.       |         00:00:51           |           00:00:48         |
-// |                            |                            |
-// 5.       |         00:00:51           |           00:00:49         |
-// |                            |                            |
-// 6.       |         00:00:49           |           00:00:50         |
-// |                            |                            |
-// HALT DUR.   |         00:00:00           |           00:00:00         |
-// _______________|____________________________|____________________________|
-
-// BATH              JAR A             JAR B
-// TEMP. MIN.     :    45.9              40.9              22.1
-// TEMP. MAX.     :    50.3              42.9              43.0
-
-// COMMENT    :
-
-// SIGNATURE  :  __________________________________________________
-
-
-// [
-//   { starttimeA: '10:04:54' },
-//   { starttimeB: '10:04:59' },
-//   { EndtimeA: '10:05:46' },
-//   { EndtimeB: '10:05:50' },
-//   { '1A': '00:00:55', validA: true, '1B': '00:00:56', validB: true },
-//   { '2A': '00:00:50', validA: true, '2B': '00:00:51', validB: true },
-//   { '3A': '00:00:50', validA: true, '3B': '00:00:59', validB: true },
-//   { '4A': '00:00:51', validA: true, '4B': '00:00:48', validB: true },
-//   { '5A': '00:00:51', validA: true, '5B': '00:00:49', validB: true },
-//   { '6A': '00:00:49', validA: true, '6B': '00:00:50', validB: true },
-//   {
-//     'HALT DURA': '00:00:00',
-//     validA: true,
-//     'HALT DURB': '00:00:00',
-//     validB: true
-//   },
-//   { tempMin: '45.9' },
-//   { tempMax: '50.3' },
-//   { maxtimeA: 55 },
-//   { maxtimeB: 59 },
-//   { Finalmax: '00:00:59' }
-// ]
-
-// === Code Execution Successful ===
