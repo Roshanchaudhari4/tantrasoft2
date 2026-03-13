@@ -266,3 +266,8 @@ Finalresult.push({Finalmax: FinalMaxTime})
 
 
 console.log(Finalresult)
+
+// start timea end timea aur b ka bhi uspar validation nahi chhaiye mujhe aur dusre string me jeseTempMinBath: '57.6' },
+//   { TempmaxJarA: '22.3' },
+//   { TempMaxBath: '53.1' },
+//   { TempMaxJarB: '40.7' }, ye dala hain wese pehle wale ka bhi chhaiye baki code same rakho without regax
