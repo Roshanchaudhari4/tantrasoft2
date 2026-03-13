@@ -1,0 +1,207 @@
+var a = `
+                             ELECTROLAB DISINTEGRATION TESTER                   
+                                        TEST REPORT                             
+
+     Company Name : CIPLA               
+
+     Model No : ED2-SAPOx                          Version : 1.2.F            
+
+     Sr. No.  : 1501005                        Start Date: 23/05/2022      
+
+     USER NAME     : RPG                       Instrument ID: ED2-SAPOx 
+
+     SET PARAMETERS:-
+
+     MODE          :   Registration            SET BATH TEMP. :  44.5
+
+                    |            ARM A           |              ARM B         |
+                    |                            |                            |
+     DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
+                    |                            |                            |
+     MEDIA NAME     |  WATER                     |  NA                        |
+                    |                            |                            |
+     BATCH No.      |  KA21587                   |  NA                        |
+                    |                            |                            |
+     LOT No.        |  NA                        |  NA                        |
+                    |                            |                            |
+     PROTOCOL       |  01                        |  10                        |
+                    |                            |                            |
+     BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
+     _______________|____________________________|____________________________|
+     TEST SUMMARY:-
+                    |            ARM A           |              ARM B         |
+     START TIME     |         10:04:54           |           10:04:59         |
+                    |                            |                            |
+     END TIME       |         10:05:46           |           10:05:50         |
+                    |                            |                            |
+     TEST STATUS    |       Test Completed       |       Test Completed       |
+                    |                            |                            |
+     TEST ON DUR.   |                            |                            |
+           1.       |         00:00:55           |           00:00:56         |
+                    |                            |                            |
+           2.       |         00:00:50           |           00:00:51         |
+                    |                            |                            |
+           3.       |         00:00:50           |           00:00:48         |
+                    |                            |                            |
+           4.       |         00:00:51           |           00:00:48         |
+                    |                            |                            |
+           5.       |         00:00:51           |           00:00:49         |
+                    |                            |                            |
+           6.       |         00:00:49           |           00:00:50         |
+                    |                            |                            |
+        HALT DUR.   |         00:00:00           |           00:00:00         |
+     _______________|____________________________|____________________________|
+
+                         BATH              JAR A             JAR B           
+     TEMP. MIN.     :    45.9              40.9              22.1              
+     TEMP. MAX.     :    50.3              42.9              43.0              
+
+     COMMENT    :                      
+
+     SIGNATURE  :  __________________________________________________
+
+`
+
+var lines = a.split("\n");
+
+var Finalresult = [];
+var maxSeconds = 0; 
+var maxTime = "";  
+
+
+for(var i = 0; i < lines.length ; i++){
+
+    var line = lines[i].trim();
+    console.log(line)
+    
+
+     if(line.includes("START TIME")){
+         var StartTime = line.split("|")[1].trim()
+         Finalresult.push({starttimeA : StartTime})
+     }
+     
+     if(line.includes("START TIME")){
+         var StartTime = line.split("|")[2].trim()
+         Finalresult.push({starttimeB : StartTime})
+     }
+     
+     if(line.includes("END TIME")){
+         var EndTime = line.split("|")[1].trim()
+         Finalresult.push({EndtimeA : EndTime})
+     }
+     
+     if(line.includes("END TIME")){
+         var EndTime = line.split("|")[2].trim()
+         Finalresult.push({EndtimeB : EndTime})
+     }
+     
+     
+    if(line.includes(".")){ 
+     
+        var parts = line.split("|")
+        
+        if(parts.length >= 3){
+            
+            var number = parts[0].replace(".","").trim()
+                
+            var timeA = parts[1].trim()
+                    
+            var timeB = parts[2].trim()
+
+
+        function getresult(time){
+            var result = time.split(":")
+            return Number(result[0])*3600 + Number(result[1])*60 + Number(result[2]) 
+        }
+
+        var obj = {} 
+        
+        var tiA = timeA.split(":")
+        
+        if(tiA.length === 3){
+
+            var hourA = Number(tiA[0])   
+            var minA = Number(tiA[1]) 
+            var secA = Number(tiA[2]) 
+            
+            if(!isNaN(hourA) && !isNaN(minA) && !isNaN(secA)){
+        
+                obj[number + "A"] = timeA
+                obj.validA = true  
+
+                var totalA = getresult(timeA)
+
+                if(totalA > maxSeconds){
+                    maxSeconds = totalA 
+                    maxTime = timeA 
+                }
+
+            }else{ 
+                obj[number + "A"] = timeA   
+                obj.validA = false 
+            }
+
+        }
+
+
+        var tiB = timeB.split(":")
+        
+        if(tiB.length === 3){
+
+            var hourB = Number(tiB[0])   
+            var minB = Number(tiB[1]) 
+            var secB = Number(tiB[2]) 
+            
+            if(!isNaN(hourB) && !isNaN(minB) && !isNaN(secB)){
+        
+                obj[number + "B"] = timeB
+                obj.validB = true  
+
+                var totalB = getresult(timeB)
+
+                if(totalB > maxSeconds){
+                    maxSeconds = totalB 
+                    maxTime = timeB 
+                }
+
+            }else{ 
+                obj[number + "B"] = timeB   
+                obj.validB = false 
+            }
+
+        }
+
+        Finalresult.push(obj)
+
+      }
+    }
+
+}
+
+Finalresult.push({MaxTime:maxTime})
+
+console.log(Finalresult)
+
+
+// [
+//   {},
+//   {},
+//   { starttimeA: '10:04:54' },
+//   { starttimeB: '10:04:59' },
+//   { EndtimeA: '10:05:46' },
+//   { EndtimeB: '10:05:50' },
+//   {},
+//   { '1A': '00:00:55', validA: true, '1B': '00:00:56', validB: true },
+//   { '2A': '00:00:50', validA: true, '2B': '00:00:51', validB: true },
+//   { '3A': '00:00:50', validA: true, '3B': '00:00:48', validB: true },
+//   { '4A': '00:00:51', validA: true, '4B': '00:00:48', validB: true },
+//   { '5A': '00:00:51', validA: true, '5B': '00:00:49', validB: true },
+//   { '6A': '00:00:49', validA: true, '6B': '00:00:50', validB: true },
+//   {
+//     'HALT DURA': '00:00:00',
+//     validA: true,
+//     'HALT DURB': '00:00:00',
+//     validB: true
+//   },
+//   { MaxTime: '00:00:56' }
+// ]
