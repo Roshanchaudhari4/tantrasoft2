@@ -41,7 +41,7 @@ var a = `
                     |                            |                            |
            2.       |         00:00:50           |           00:00:51         |
                     |                            |                            |
-           3.       |         00:00:50           |           00:00:48         |
+           3.       |         00:00:50           |           00:00:59         |
                     |                            |                            |
            4.       |         00:00:51           |           00:00:48         |
                     |                            |                            |
@@ -65,9 +65,13 @@ var a = `
 var lines = a.split("\n");
 
 var Finalresult = [];
-var maxSeconds = 0;   // pahile aapan maxsecond la 0 set kele
-var maxTime1 = "";
-var maxTime2 = "";
+var maxSecondsA = 0; 
+var maxSecondsB = 0;
+var maxTimeA = "";
+var maxTimeB = "";
+var FinalMaxTime = "";
+
+
 
 
 for(var i = 0; i < lines.length ; i++){
@@ -112,7 +116,8 @@ for(var i = 0; i < lines.length ; i++){
 
         function getresult(time){   // ek function create kela 
             var result = time.split(":") // HH:MM:SS la : yane split krel mahnje ata to array madhe convert hoil ex ['00','00', '55']
-            return Number(result[0])*3600 + Number(result[1])*60 + Number(result[2])   
+            return Number(result[0])*3600 + Number(result[1])*60 + Number(result[2])  
+            
         }    // jar code madhe 00:01:33  and 00:02:33  ho to 0 * 3600 + 1 * 60 + 33 = 93 
                     // 0 * 3600 + 2 * 60 + 34 = 154 
                     // so 00:02:33 ha motha he
@@ -151,9 +156,9 @@ for(var i = 0; i < lines.length ; i++){
 
                 var totalA = getresult(timeA)  // mang to final result madhe store hoil
 
-                if(totalA > maxSeconds){
-                    maxSeconds = totalA 
-                    maxTime1 = timeA 
+                if(totalA > maxSecondsA){
+                    maxSecondsA = totalA 
+                    maxTimeA = timeA 
                     
                 }
                
@@ -166,6 +171,18 @@ for(var i = 0; i < lines.length ; i++){
         }
          
   // for maximum ta ite max asel 00:00:55 mang timeA cha max ha ahe aapan ekach maxsecond function banvlay so ata hi same value check krel timeB la 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
         var tiB = timeB.split(":")
         
@@ -187,9 +204,9 @@ for(var i = 0; i < lines.length ; i++){
 
                 var totalB = getresult(timeB)
 
-                if(totalB > maxSeconds){
-                    maxSeconds = totalB 
-                    maxTime2 = timeB 
+                if(totalB > maxSecondsB){
+                    maxSecondsB = totalB 
+                    maxTimeB = timeB 
                 }
 
             }else{ 
@@ -200,17 +217,128 @@ for(var i = 0; i < lines.length ; i++){
         }
         
         
+        
 
         Finalresult.push(obj)
 
       }
+      
+      
     }
-// ata ithe timeA chi ji max aliy ti timeb sobat pan compare hoil karan ekach maxsecond ahe so ata max ha 00:00:56 yeil mang purn code cha max ha 00:00:56 yeil
+      
+     
+     if(line.includes("TEMP. MIN.")){
+        var TempMin = line.split(":")[1].trim().split(" ")[0]
+        Finalresult.push({tempMin : TempMin})
+    } 
+    
+    if(line.includes("TEMP. MAX.")){
+        var TempMax = line.split(":")[1].trim().split(" ")[0]
+        Finalresult.push({tempMax : TempMax})
+    }
 }
 
-// Finalresult.push({MaxTimeA:maxTime})
+// Finalresult.push({FinalTime:maxSeconds})
 
-Finalresult.push({maxtimeA: maxTime1})
-Finalresult.push({maxtimeB: maxTime2})
+if(maxSecondsA > maxSecondsB){
+    FinalMaxTime = maxTimeA
+}else{
+    FinalMaxTime = maxTimeB
+}
+
+
+
+Finalresult.push({maxtimeA: maxSecondsA})
+Finalresult.push({maxtimeB: maxSecondsB})
+Finalresult.push({Finalmax: FinalMaxTime})
 
 console.log(Finalresult)
+
+
+// ELECTROLAB DISINTEGRATION TESTER
+// TEST REPORT
+
+// Company Name : CIPLA
+
+// Model No : ED2-SAPOx                          Version : 1.2.F
+
+// Sr. No.  : 1501005                        Start Date: 23/05/2022
+
+// USER NAME     : RPG                       Instrument ID: ED2-SAPOx
+
+// SET PARAMETERS:-
+
+// MODE          :   Registration            SET BATH TEMP. :  44.5
+
+// |            ARM A           |              ARM B         |
+// |                            |                            |
+// DRUG NAME      |  PREGABALIN 100 MG         |  NA                        |
+// |                            |                            |
+// MEDIA NAME     |  WATER                     |  NA                        |
+// |                            |                            |
+// BATCH No.      |  KA21587                   |  NA                        |
+// |                            |                            |
+// LOT No.        |  NA                        |  NA                        |
+// |                            |                            |
+// PROTOCOL       |  01                        |  10                        |
+// |                            |                            |
+// BASKET TYPE    |  10 Mesh                   |  10 Mesh                   |
+// _______________|____________________________|____________________________|
+// TEST SUMMARY:-
+// |            ARM A           |              ARM B         |
+// START TIME     |         10:04:54           |           10:04:59         |
+// |                            |                            |
+// END TIME       |         10:05:46           |           10:05:50         |
+// |                            |                            |
+// TEST STATUS    |       Test Completed       |       Test Completed       |
+// |                            |                            |
+// TEST ON DUR.   |                            |                            |
+// 1.       |         00:00:55           |           00:00:56         |
+// |                            |                            |
+// 2.       |         00:00:50           |           00:00:51         |
+// |                            |                            |
+// 3.       |         00:00:50           |           00:00:59         |
+// |                            |                            |
+// 4.       |         00:00:51           |           00:00:48         |
+// |                            |                            |
+// 5.       |         00:00:51           |           00:00:49         |
+// |                            |                            |
+// 6.       |         00:00:49           |           00:00:50         |
+// |                            |                            |
+// HALT DUR.   |         00:00:00           |           00:00:00         |
+// _______________|____________________________|____________________________|
+
+// BATH              JAR A             JAR B
+// TEMP. MIN.     :    45.9              40.9              22.1
+// TEMP. MAX.     :    50.3              42.9              43.0
+
+// COMMENT    :
+
+// SIGNATURE  :  __________________________________________________
+
+
+// [
+//   { starttimeA: '10:04:54' },
+//   { starttimeB: '10:04:59' },
+//   { EndtimeA: '10:05:46' },
+//   { EndtimeB: '10:05:50' },
+//   { '1A': '00:00:55', validA: true, '1B': '00:00:56', validB: true },
+//   { '2A': '00:00:50', validA: true, '2B': '00:00:51', validB: true },
+//   { '3A': '00:00:50', validA: true, '3B': '00:00:59', validB: true },
+//   { '4A': '00:00:51', validA: true, '4B': '00:00:48', validB: true },
+//   { '5A': '00:00:51', validA: true, '5B': '00:00:49', validB: true },
+//   { '6A': '00:00:49', validA: true, '6B': '00:00:50', validB: true },
+//   {
+//     'HALT DURA': '00:00:00',
+//     validA: true,
+//     'HALT DURB': '00:00:00',
+//     validB: true
+//   },
+//   { tempMin: '45.9' },
+//   { tempMax: '50.3' },
+//   { maxtimeA: 55 },
+//   { maxtimeB: 59 },
+//   { Finalmax: '00:00:59' }
+// ]
+
+// === Code Execution Successful ===
