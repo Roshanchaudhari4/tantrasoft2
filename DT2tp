@@ -65,8 +65,9 @@ var a = `
 var lines = a.split("\n");
 
 var Finalresult = [];
-var maxSeconds = 0; 
-var maxTime = "";  
+var maxSeconds = 0;   // pahile aapan maxsecond la 0 set kele
+var maxTime1 = "";
+var maxTime2 = "";
 
 
 for(var i = 0; i < lines.length ; i++){
@@ -96,53 +97,75 @@ for(var i = 0; i < lines.length ; i++){
      }
      
      
-    if(line.includes(".")){ 
+    if(line.includes(".") && line.includes("|") && line.includes(":") ){  // check krto jithe line include keliy na tithe barobar ahe ka he 
      
-        var parts = line.split("|")
+        var parts = line.split("|")  // line la | ne split krto
         
-        if(parts.length >= 3){
+        if(parts.length >= 3){  // hh mm ss
             
-            var number = parts[0].replace(".","").trim()
+            var number = parts[0].replace(".","").trim()   //part 0 mahnje 1. tycha . kadun tyla 1 banvel
                 
-            var timeA = parts[1].trim()
+            var timeA = parts[1].trim() // part 1 mahnje  00:00:55 he line ya line cha makcha pudcha space remove krel mahnje trim krel
                     
-            var timeB = parts[2].trim()
+            var timeB = parts[2].trim() // part 2 mahnje  00:00:56 he line ya line cha makcha pudcha space remove krel mahnje trim krel
 
 
-        function getresult(time){
-            var result = time.split(":")
-            return Number(result[0])*3600 + Number(result[1])*60 + Number(result[2]) 
-        }
+        function getresult(time){   // ek function create kela 
+            var result = time.split(":") // HH:MM:SS la : yane split krel mahnje ata to array madhe convert hoil ex ['00','00', '55']
+            return Number(result[0])*3600 + Number(result[1])*60 + Number(result[2])   
+        }    // jar code madhe 00:01:33  and 00:02:33  ho to 0 * 3600 + 1 * 60 + 33 = 93 
+                    // 0 * 3600 + 2 * 60 + 34 = 154 
+                    // so 00:02:33 ha motha he
+                    // 00 ha 0
+                    //00 ha 1
+                    // 00 ha 55
+                    
+                    
 
-        var obj = {} 
+
+
+
+        var obj = {}   // ek object create kela
         
-        var tiA = timeA.split(":")
+        var tiA = timeA.split(":")   // timeA madhla split hoil colon ne array madhe convert hoil "00" "00" "55"
         
-        if(tiA.length === 3){
+        if(tiA.length === 3){ // mang ithe check hoil 3 parts madhe ahe ka hh mm ss
 
             var hourA = Number(tiA[0])   
-            var minA = Number(tiA[1]) 
-            var secA = Number(tiA[2]) 
+            var minA = Number(tiA[1])   
+            var secA = Number(tiA[2])    
             
-            if(!isNaN(hourA) && !isNaN(minA) && !isNaN(secA)){
+            //   "00" - 0
+            //   "00" - 0
+            //     "55" - 55
+            
+            if(!isNaN(hourA) && !isNaN(minA) && !isNaN(secA)
+             &&
+                
+                    hourA >= 0 && hourA <=23 &&     
+                    minA >= 0 && minA <=59 &&
+                    secA >=0 && secA <=59){
         
-                obj[number + "A"] = timeA
-                obj.validA = true  
+                obj[number + "A"] = timeA  //  so 1 + A = 1A =  00:00:55
+                obj.validA = true   // jar result valid asel t true
 
-                var totalA = getresult(timeA)
+                var totalA = getresult(timeA)  // mang to final result madhe store hoil
 
                 if(totalA > maxSeconds){
                     maxSeconds = totalA 
-                    maxTime = timeA 
+                    maxTime1 = timeA 
+                    
                 }
+               
 
             }else{ 
-                obj[number + "A"] = timeA   
+                obj[number + "A"] = timeA   // jar invalid asel 00:aa:55 so inavlid and print false  
                 obj.validA = false 
             }
 
         }
-
+         
+  // for maximum ta ite max asel 00:00:55 mang timeA cha max ha ahe aapan ekach maxsecond function banvlay so ata hi same value check krel timeB la 
 
         var tiB = timeB.split(":")
         
@@ -152,7 +175,12 @@ for(var i = 0; i < lines.length ; i++){
             var minB = Number(tiB[1]) 
             var secB = Number(tiB[2]) 
             
-            if(!isNaN(hourB) && !isNaN(minB) && !isNaN(secB)){
+            if(!isNaN(hourB) && !isNaN(minB) && !isNaN(secB)
+            &&
+                
+                    hourA >= 0 && hourB <=23 &&     
+                    minB >= 0 && minB<=59 &&
+                    secB >=0 && secB <=59){
         
                 obj[number + "B"] = timeB
                 obj.validB = true  
@@ -161,7 +189,7 @@ for(var i = 0; i < lines.length ; i++){
 
                 if(totalB > maxSeconds){
                     maxSeconds = totalB 
-                    maxTime = timeB 
+                    maxTime2 = timeB 
                 }
 
             }else{ 
@@ -170,38 +198,19 @@ for(var i = 0; i < lines.length ; i++){
             }
 
         }
+        
+        
 
         Finalresult.push(obj)
 
       }
     }
-
+// ata ithe timeA chi ji max aliy ti timeb sobat pan compare hoil karan ekach maxsecond ahe so ata max ha 00:00:56 yeil mang purn code cha max ha 00:00:56 yeil
 }
 
-Finalresult.push({MaxTime:maxTime})
+// Finalresult.push({MaxTimeA:maxTime})
+
+Finalresult.push({maxtimeA: maxTime1})
+Finalresult.push({maxtimeB: maxTime2})
 
 console.log(Finalresult)
-
-
-// [
-//   {},
-//   {},
-//   { starttimeA: '10:04:54' },
-//   { starttimeB: '10:04:59' },
-//   { EndtimeA: '10:05:46' },
-//   { EndtimeB: '10:05:50' },
-//   {},
-//   { '1A': '00:00:55', validA: true, '1B': '00:00:56', validB: true },
-//   { '2A': '00:00:50', validA: true, '2B': '00:00:51', validB: true },
-//   { '3A': '00:00:50', validA: true, '3B': '00:00:48', validB: true },
-//   { '4A': '00:00:51', validA: true, '4B': '00:00:48', validB: true },
-//   { '5A': '00:00:51', validA: true, '5B': '00:00:49', validB: true },
-//   { '6A': '00:00:49', validA: true, '6B': '00:00:50', validB: true },
-//   {
-//     'HALT DURA': '00:00:00',
-//     validA: true,
-//     'HALT DURB': '00:00:00',
-//     validB: true
-//   },
-//   { MaxTime: '00:00:56' }
-// ]
